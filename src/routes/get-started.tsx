@@ -1,7 +1,10 @@
 import {Link} from "react-router-dom";
+
+import Button from "../components/ui/button";
+
 export default function GetStarted() {
 	return (
-		<div className="get-started relative w-screen h-screen flex items-start justify-center bg-generic-100/90 px-4 py-8 md:p-16 before:content-[''] before:absolute before:bg-[url('/get_started_backdrop.png')] before:inset-0 before:-z-10 before:bg-no-repeat before:bg-center before:w-full before:h-full before:bg-cover ">
+		<div className="get-started relative w-screen h-screen flex items-start justify-center bg-generic-100/90 px-4 py-8 md:p-16 before:content-[''] before:absolute before:bg-[url('/get_started_backdrop.png')] before:inset-0 before:-z-10 before:bg-no-repeat before:bg-center before:w-full before:h-full before:bg-cover">
 			<div className="w-full h-full flex flex-col items-center justify-between">
 				<h1 className="font-semibold text-primary-500 text-4xl">
 					The Match Day
@@ -49,9 +52,9 @@ export default function GetStarted() {
 						</div>
 					</div>
 					<div>
-						<Link to="/app">
-							<button>Get Started</button>
-						</Link>
+						<Button>
+							<Link to="/app/league">Get Started</Link>
+						</Button>
 					</div>
 				</div>
 			</div>

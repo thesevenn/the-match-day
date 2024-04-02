@@ -5,6 +5,8 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import App from "./routes/app.tsx";
 import GetStarted from "./routes/get-started.tsx";
+import SelectLeague from "./components/select-league.tsx";
+import SelectTeam from "./components/select-team.tsx";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -17,8 +19,12 @@ const router = createBrowserRouter([
 		element: <App />,
 		children: [
 			{
-				path: "app/contact",
-				element: <div>Hello contact</div>,
+				path: "/app/league",
+				element: <SelectLeague />,
+			},
+			{
+				path: "/app/league/:_leagueId/team",
+				element: <SelectTeam />,
 			},
 		],
 	},
