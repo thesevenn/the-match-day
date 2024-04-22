@@ -60,19 +60,36 @@ const SelectLeague: FC<propType> = () => {
 	// const crestRef = useRef<HTMLImageElement>(null);
 
 	return (
-		<section className="select-league w-full h-screen flex justify-center bg-pl-500">
+		<section
+			style={{
+				backgroundImage: `url(${leagues[current].backdrop})`,
+				backgroundPosition: "center",
+				backgroundRepeat: "no-repeat",
+				backgroundSize: "cover",
+			}}
+			className={`select-league w-full h-screen flex justify-center ${
+				leagues[current].background
+					? leagues[current].background
+					: "bg-generic-100/50"
+			}`}
+		>
 			<MaxWidthWrapper>
 				<div className="flex flex-col items-center justify-between w-full py-12 h-full gap-8">
 					<h1 className="text-white text-2xl font-semibold">Select League</h1>
 					<div className="flex flex-col w-full items-center gap-12">
 						<div className="slider-carousel w-[250px] overflow-hidden flex justify-center">
 							<div
-								className="slider w-full flex transition-transform gap-8 sm:gap-28"
+								className="slider w-full flex transition-transform ease-in-out gap-8 sm:gap-28"
 								style={{transform: `translateX(${-current * width}px)`}}
 								ref={sliderRef}
 							>
 								{leagues.map((league, index) => (
-									<League {...league} key={league.name} index={index} />
+									<League
+										{...league}
+										key={league.name}
+										index={index}
+										current={current}
+									/>
 								))}
 							</div>
 						</div>
@@ -86,7 +103,9 @@ const SelectLeague: FC<propType> = () => {
 									>
 										<ChevronLeft />
 									</i>
-									<span className="grow capitalize">Hero ISL</span>
+									<span className="grow capitalize">
+										{leagues[current].name}
+									</span>
 									<i
 										tabIndex={2}
 										className="grow-0 hover:text-white/40 focus:text-white/40 focus:scale-95 cursor-pointer"

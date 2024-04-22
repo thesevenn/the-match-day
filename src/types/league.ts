@@ -3,5 +3,5 @@ export interface League {
 	src: string;
 	alt: string;
 	backdrop: string;
-	color: string;
+	background: string;
 }
