@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {FC, useState, useEffect, useRef} from "react";
 
 import {ChevronLeft, ChevronRight} from "lucide-react";
 
@@ -10,30 +10,54 @@ import {leagues} from "../data/leagues";
 
 interface propType {}
 const SelectLeague: FC<propType> = () => {
-	// const [current, setCurrent] = useState<number>(0);
-	// const [dragging, setDragging] = useState<boolean>(false);
-	// const [moveDirectionLeft, setMoveDirectionLeft] = useState(false);
-	// const [mouseStart, setMouseStart] = useState<number>(0);
-	// const [willChange, setWillChange] = useState<boolean>(false);
+	const sliderRef = useRef<HTMLDivElement>(null);
+	const [current, setCurrent] = useState<number>(0);
+	const [scrollWidth, setScrollWidth] = useState<number>(0);
+	const [width, setWidth] = useState<number>(250);
+
+	function calculateWidth() {
+		if (sliderRef.current) {
+			const sliderWidth = sliderRef.current.scrollWidth;
+			// const offset = sliderRef.current.offsetWidth;
+			const gap: number = parseInt(getComputedStyle(sliderRef.current).gap);
+			console.log(gap, "gap");
+			setWidth(sliderWidth / (leagues.length - 1) + gap);
+			setWidth(250 + gap);
+			setScrollWidth(sliderWidth);
+		}
+	}
+	useEffect(() => {
+		// css styles are not available on first render (gap,etc),
+		// certain delay makes it possible for styles to be applied
+		// and access with js
+		const timeout = setTimeout(calculateWidth, 1000);
+		console.log("First time");
+		return () => clearTimeout(timeout);
+	}, []);
+
+	useEffect(() => {
+		window.addEventListener("resize", calculateWidth);
+		return () => window.removeEventListener("resize", calculateWidth);
+	}, []);
+
+	console.log(width, "width");
+	console.log(current, "current");
+	console.log(scrollWidth);
+	function handleChangeLeft() {
+		setCurrent(prev => {
+			if (prev == 0) {
+				return leagues.length - 2;
+			} else return prev - 1;
+		});
+	}
+	function handleChangeRight() {
+		setCurrent(prev => {
+			if (prev >= leagues.length - 1) return 0;
+			else return prev + 1;
+		});
+	}
 
 	// const crestRef = useRef<HTMLImageElement>(null);
-	// const sliderRef = useRef<HTMLDivElement>(null);
-	// const [sliderWidth, setSliderwidth] = useState<number>(
-	// 	(sliderRef.current?.scrollWidth || 0) -
-	// 		(sliderRef.current?.clientWidth || 0) || 0
-	// );
-
-	// useEffect(() => {
-	// 	function updateWidth() {
-	// 		setSliderwidth(
-	// 			(sliderRef.current?.scrollWidth || 0) -
-	// 				(sliderRef.current?.clientWidth || 0) || 0
-	// 		);
-	// 	}
-	// 	window.addEventListener("resize", updateWidth);
-
-	// 	return () => window.removeEventListener("resize", updateWidth);
-	// }, []);
 
 	return (
 		<section className="select-league w-full h-screen flex justify-center bg-pl-500">
@@ -41,36 +65,14 @@ const SelectLeague: FC<propType> = () => {
 				<div className="flex flex-col items-center justify-between w-full py-12 h-full gap-8">
 					<h1 className="text-white text-2xl font-semibold">Select League</h1>
 					<div className="flex flex-col w-full items-center gap-12">
-						<div className="slider-carousel w-full overflow-hidden">
-							<div className="slider w-full flex transition-transform gap-28 justify-center">
-								{/*
-								<img
-									src="/pl.svg"
-									alt=""
-									className="slide w-[80%] md:ml-[35%] object-contain flex-shrink-0 max-w-[300px] pointer-events-none"
-									ref={crestRef}
-									onClick={() =>
-										console.log(crestRef.current?.getBoundingClientRect().width)
-									}
-								/>
-								<img
-									src="/pl.svg"
-									alt=""
-									className="slide w-[80%] object-contain flex-shrink-0 max-w-[300px]"
-								/>
-								<img
-									src="/pl.svg"
-									alt=""
-									className="slide  w-[80%] object-contain flex-shrink-0 max-w-[300px]"
-								/>
-								*/}
+						<div className="slider-carousel w-[250px] overflow-hidden flex justify-center">
+							<div
+								className="slider w-full flex transition-transform gap-8 sm:gap-28"
+								style={{transform: `translateX(${-current * width}px)`}}
+								ref={sliderRef}
+							>
 								{leagues.map((league, index) => (
-									<League
-										src={league.src}
-										alt={league.alt}
-										key={league.name}
-										index={index}
-									/>
+									<League {...league} key={league.name} index={index} />
 								))}
 							</div>
 						</div>
@@ -80,6 +82,7 @@ const SelectLeague: FC<propType> = () => {
 									<i
 										tabIndex={1}
 										className="grow-0 hover:text-white/40 focus:text-white/40 focus:scale-95 cursor-pointer"
+										onClick={handleChangeLeft}
 									>
 										<ChevronLeft />
 									</i>
@@ -87,6 +90,7 @@ const SelectLeague: FC<propType> = () => {
 									<i
 										tabIndex={2}
 										className="grow-0 hover:text-white/40 focus:text-white/40 focus:scale-95 cursor-pointer"
+										onClick={handleChangeRight}
 									>
 										<ChevronRight />
 									</i>
