@@ -1,5 +1,7 @@
 import {FC, HTMLAttributes} from "react";
 
+import {cva} from "class-variance-authority";
+
 import {buttonVariants} from "../../types/button-variants";
 interface propType extends HTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
