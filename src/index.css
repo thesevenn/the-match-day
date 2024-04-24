@@ -61,3 +61,34 @@ button:focus,
 button:focus-visible {
 	outline: 4px auto -webkit-focus-ring-color;
 }
+/* Chrome, Safari, etc. */
+::-webkit-scrollbar {
+	width: 5px; /* Adjust width for thin scrollbar */
+	height: 5px; /* Adjust height for thin scrollbar */
+}
+
+/* Firefox */
+scrollbar-width: thin;
+
+/* Opera, Edge */
+scrollbar-thin: thin;
+
+body {
+	scrollbar-width: 1px; /* Set scrollbar width to thin */
+}
+
+/* Optional styles for specific scrollbar elements */
+::-webkit-scrollbar-thumb {
+	background: hsl(15, 8%, 10%);
+	border-radius: 20px; /* Change thumb color */
+}
+
+::-webkit-scrollbar-track {
+	background: hsl(0, 10%, 16%); /* Change track color */
+}
+
+/* Firefox (limited corner rounding support) */
+scrollbar-corner: 20px; /* Round corners slightly */
+
+/* Opera, Edge (limited support) */
+-opera-scrollbar-corner: rounded; /* Round corners slightly */

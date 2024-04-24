@@ -1,4 +1,5 @@
 export interface League {
+	id: number;
 	name: string;
 	src: string;
 	alt: string;

@@ -37,6 +37,9 @@ export default {
         },
         ghost: {
           200: "hsl(0,10%,16%)"
+        },
+        reddish: {
+          500: "hsl(0,19%,28%)"
         }
       }
     },

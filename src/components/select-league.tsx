@@ -13,7 +13,6 @@ const SelectLeague: FC<propType> = () => {
 	const sliderRef = useRef<HTMLDivElement>(null);
 	const [current, setCurrent] = useState<number>(0);
 	const [width, setWidth] = useState<number>(250);
-
 	function calculateWidth() {
 		if (sliderRef.current) {
 			const sliderWidth = sliderRef.current.scrollWidth;
@@ -27,7 +26,6 @@ const SelectLeague: FC<propType> = () => {
 		// certain delay makes it possible for styles to be applied
 		// and access with js
 		const timeout = setTimeout(calculateWidth, 1000);
-		console.log("First time");
 		return () => clearTimeout(timeout);
 	}, []);
 
@@ -108,7 +106,7 @@ const SelectLeague: FC<propType> = () => {
 							</div>
 						</div>
 						<div className="">
-							<Link to="/app/league/140/team">
+							<Link to={`/app/league/${leagues[current].id}/team`}>
 								<Button>Confirm Selection</Button>
 							</Link>
 						</div>
