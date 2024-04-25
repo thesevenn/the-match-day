@@ -3,10 +3,11 @@ import {useParams} from "react-router-dom";
 
 import {Check} from "lucide-react";
 
-import Button from "./ui/button";
-import {getTeamsOfLeague} from "../api/get-teams";
 import {Team} from "../types/team";
 import {League} from "../types/league";
+import {buttonVariants} from "../types/button-variants";
+import Button from "./ui/button";
+import {getTeamsOfLeague} from "../api/get-teams";
 import MaxWidthWrapper from "./ui/max-width-wrapper";
 import {leagues} from "../data/leagues";
 
@@ -119,7 +120,13 @@ const SelectTeam: FC<propType> = () => {
 							selected {selected.name}
 						</p>
 					)}
-					<Button>Confirm Selection</Button>
+					<Button
+						variant={
+							selected.id ? buttonVariants.secondary : buttonVariants.ghost
+						}
+					>
+						Confirm Selection
+					</Button>
 				</div>
 			</div>
 		</section>

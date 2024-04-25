@@ -3,6 +3,7 @@ import {FC, useState, useEffect, useRef} from "react";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Link} from "react-router-dom";
 
+import {buttonVariants} from "../types/button-variants";
 import MaxWidthWrapper from "./ui/max-width-wrapper";
 import Button from "./ui/button";
 import League from "./league";
@@ -107,7 +108,9 @@ const SelectLeague: FC<propType> = () => {
 						</div>
 						<div className="">
 							<Link to={`/app/league/${leagues[current].id}/team`}>
-								<Button>Confirm Selection</Button>
+								<Button variant={buttonVariants.secondary}>
+									Confirm Selection
+								</Button>
 							</Link>
 						</div>
 					</div>

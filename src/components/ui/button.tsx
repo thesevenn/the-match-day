@@ -1,18 +1,19 @@
 import {FC, HTMLAttributes} from "react";
 
-import {cva} from "class-variance-authority";
-
 import {buttonVariants} from "../../types/button-variants";
 interface propType extends HTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
 	variant?: buttonVariants;
 }
-const Button: FC<propType> = ({children}) => {
+
+const Button: FC<propType> = ({children, variant}) => {
 	return (
 		<button
 			type="button"
 			aria-roledescription="selection confirmation button"
-			className="min-w-60 bg-primary-500 rounded-full px-8 py-4 text-generic-100 font-medium text-base hover:saturate-0 transition-all"
+			className={`min-w-60 ${
+				variant ? variant : buttonVariants.default
+			} rounded-full px-8 py-4 font-medium text-base transition-all shadow-lg hover:scale-[0.98] hover:shadow-xl`}
 		>
 			{children}
 		</button>
