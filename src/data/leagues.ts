@@ -7,7 +7,7 @@ export const leagues: Array<League> = [
 		src: "/pl.png",
 		alt: "Premier League",
 		backdrop: "/pl-backdrop.png",
-		background: "bg-pl-500/90",
+		background: "bg-pl-alt/80",
 	},
 	{
 		id: 140,
