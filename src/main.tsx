@@ -7,6 +7,7 @@ import App from "./routes/app.tsx";
 import GetStarted from "./routes/get-started.tsx";
 import SelectLeague from "./components/select-league.tsx";
 import SelectTeam from "./components/select-team.tsx";
+import TeamSeason from "./routes/team-season.tsx";
 import "./index.css";
 
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
 			{
 				path: "/app/:_leagueId/team",
 				element: <SelectTeam />,
+			},
+			{
+				path: "/app/:_leagueId/:_teamId/current",
+				element: <TeamSeason />,
 			},
 		],
 	},
