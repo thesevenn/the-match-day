@@ -6,7 +6,7 @@ interface propType {
 	index: number;
 	current: number;
 }
-const League: FC<propType> = ({src, alt, current, index}) => {
+const Slide: FC<propType> = ({src, alt, current, index}) => {
 	return (
 		<img
 			src={src}
@@ -18,4 +18,4 @@ const League: FC<propType> = ({src, alt, current, index}) => {
 	);
 };
 
-export default League;
+export default Slide;
