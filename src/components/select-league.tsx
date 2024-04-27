@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {buttonVariants} from "../types/button-variants";
 import MaxWidthWrapper from "./ui/max-width-wrapper";
 import Button from "./ui/button";
-import Slide from "./ui/slide";
+import League from "./league";
 import {leagues} from "../data/leagues";
 
 interface propType {}
@@ -38,7 +38,7 @@ const SelectLeague: FC<propType> = () => {
 	function handleChangeLeft() {
 		setCurrent(prev => {
 			if (prev == 0) {
-				return leagues.length - 2;
+				return leagues.length - 1;
 			} else return prev - 1;
 		});
 	}
@@ -73,7 +73,7 @@ const SelectLeague: FC<propType> = () => {
 									ref={sliderRef}
 								>
 									{leagues.map((league, index) => (
-										<Slide
+										<League
 											{...league}
 											key={league.name}
 											index={index}
@@ -107,7 +107,7 @@ const SelectLeague: FC<propType> = () => {
 							</div>
 						</div>
 						<div className="">
-							<Link to={`/app/${leagues[current].id}/team`}>
+							<Link to={`/app/league/${leagues[current].id}/team`}>
 								<Button variant={buttonVariants.secondary}>
 									Confirm Selection
 								</Button>
