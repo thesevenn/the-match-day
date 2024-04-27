@@ -32,6 +32,7 @@ const SelectTeam: FC<propType> = () => {
 		async function getData() {
 			try {
 				setLoading(true);
+				setError(false);
 				const cachedTeams: string = localStorage.getItem("teams-cache")!;
 				const cachedLeague: string = localStorage.getItem("user-leagueId")!;
 				if (
@@ -94,10 +95,10 @@ const SelectTeam: FC<propType> = () => {
 					<MaxWidthWrapper>
 						<Suspense>
 							<div className="m-4 w-full md:w-[600px] max-w-[380px] md:max-w-[600px] grid grid-cols-3 md:grid-cols-5 rounded-md h-[50vh] min-h-[360px] md:min-h-[560px] md:h-auto overflow-y-scroll bg-generic-100/75">
-								{loading &&
+								{/* {loading &&
 									Array(20)
 										.fill(0)
-										.map((_, index: number) => <LoadingCard key={index} />)}
+										.map((_, index: number) => <LoadingCard key={index} />)} */}
 								{!loading &&
 									teams.map(team => (
 										<div
