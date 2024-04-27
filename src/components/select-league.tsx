@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import {buttonVariants} from "../types/button-variants";
 import MaxWidthWrapper from "./ui/max-width-wrapper";
 import Button from "./ui/button";
-import League from "./league";
+import Slider from "./league";
 import {leagues} from "../data/leagues";
 
 interface propType {}
@@ -73,7 +73,7 @@ const SelectLeague: FC<propType> = () => {
 									ref={sliderRef}
 								>
 									{leagues.map((league, index) => (
-										<League
+										<Slider
 											{...league}
 											key={league.name}
 											index={index}
