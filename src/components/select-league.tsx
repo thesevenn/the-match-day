@@ -38,7 +38,7 @@ const SelectLeague: FC<propType> = () => {
 	function handleChangeLeft() {
 		setCurrent(prev => {
 			if (prev == 0) {
-				return leagues.length - 2;
+				return leagues.length - 1;
 			} else return prev - 1;
 		});
 	}
