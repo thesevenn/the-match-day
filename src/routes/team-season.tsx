@@ -2,6 +2,6 @@ import {FC} from "react";
 
 interface propType {}
 const TeamSeason: FC<propType> = () => {
-	return <h1>The Matchday</h1>;
+	return <section className="team-season"></section>;
 };
 export default TeamSeason;
