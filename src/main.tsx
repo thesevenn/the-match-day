@@ -24,11 +24,11 @@ const router = createBrowserRouter([
 				element: <SelectLeague />,
 			},
 			{
-				path: "/app/league/:_leagueId/team",
+				path: "/app/league/:_league/team",
 				element: <SelectTeam />,
 			},
 			{
-				path: "/app/:_leagueId/:_teamId/current",
+				path: "/app/:_league/:_team/current",
 				element: <TeamSeason />,
 			},
 		],
