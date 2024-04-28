@@ -10,13 +10,14 @@ import Button from "./ui/button";
 import {getTeamsOfLeague} from "../api/get-teams";
 import MaxWidthWrapper from "./ui/max-width-wrapper";
 import {leagues} from "../data/leagues";
+import {currentSeason} from "../lib/current-season";
 
 interface propType {}
 const SelectTeam: FC<propType> = () => {
 	const [teams, setTeams] = useState<Array<Team>>([]);
 	const [currentLeauge, setCurrentLeague] = useState<League | undefined>();
 	const [selected, setSelected] = useState<Team>({} as Team);
-	const {_leagueId} = useParams();
+	const {_league} = useParams();
 	useEffect(() => {
 		async function getData() {
 			const cachedTeams: string = localStorage.getItem("teams-cache")!;
@@ -24,18 +25,14 @@ const SelectTeam: FC<propType> = () => {
 			if (
 				cachedTeams &&
 				cachedLeague &&
-				JSON.parse(cachedLeague) == _leagueId &&
+				JSON.parse(cachedLeague) == _league &&
 				cachedTeams.length > 2
 			) {
 				console.log("in cache");
 				setTeams(JSON.parse(cachedTeams));
 			} else {
-				const date: Date = new Date();
-				const month: number = date.getMonth();
-				const year: number =
-					month > 5 ? date.getFullYear() : date.getFullYear() - 1;
-				console.log(year);
-				const data = await getTeamsOfLeague(parseInt(_leagueId || ""), year);
+				const year: number = currentSeason();
+				const data = await getTeamsOfLeague(parseInt(_league || ""), year);
 				console.log("inside api");
 				//@ts-expect-error complex data shape from api
 				const extractedData: Array<Team> = data.response.map(item => {
@@ -51,17 +48,17 @@ const SelectTeam: FC<propType> = () => {
 				setTeams(extractedData);
 				localStorage.clear();
 				localStorage.setItem("teams-cache", JSON.stringify(extractedData));
-				localStorage.setItem("user-leagueId", JSON.stringify(_leagueId));
+				localStorage.setItem("user-leagueId", JSON.stringify(_league));
 			}
 		}
 		getData();
-	}, [_leagueId]);
+	}, [_league]);
 	useEffect(() => {
 		console.log("reloads");
 		setCurrentLeague(
-			leagues.find(league => league.id == parseInt(_leagueId || ""))
+			leagues.find(league => league.id == parseInt(_league || ""))
 		);
-	}, [_leagueId]);
+	}, [_league]);
 
 	return (
 		<section
@@ -130,7 +127,7 @@ const SelectTeam: FC<propType> = () => {
 						</p>
 					)}
 					<Link
-						to={selected.id ? `/app/${_leagueId}/${selected.id}/current` : ""}
+						to={selected.id ? `/app/${_league}/${selected.id}/current` : ""}
 					>
 						<Button
 							variant={

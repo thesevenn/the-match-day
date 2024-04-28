@@ -1,13 +1,38 @@
-import {FC, useState} from "react";
+import {FC, useState, useEffect} from "react";
+import {useParams} from "react-router-dom";
 
 import MatchCard from "../components/match-card";
 import Tabs from "../components/ui/tabs";
 import Tab from "../components/ui/tab";
+import SeasonView from "../components/season-view";
+import {getSeasonOfTeam} from "../api/get-season";
+import {currentSeason} from "../lib/current-season";
 
 const tabs = ["season", "calendar", "matchday"];
+const value = [
+	{
+		name: "season",
+		render: SeasonView,
+	},
+];
 interface propType {}
 const TeamSeason: FC<propType> = () => {
 	const [activeTab, setActiveTab] = useState<number>(0);
+	const {_league, _team} = useParams();
+
+	useEffect(() => {
+		async function getData() {
+			const season = currentSeason();
+			const data = await getSeasonOfTeam(
+				_team || "",
+				season.toString(),
+				_league
+			);
+			const extractedData = data.response;
+			console.log(data);
+		}
+		getData();
+	}, [_team, _league]);
 	return (
 		<section className="team-season w-full bg-generic-100 flex flex-col gap-8 items-center">
 			<header className="header-league-info flex justify-between items-center bg-primary-500 p-4 lg:px-48 w-full sticky top-0 z-10">
@@ -32,17 +57,7 @@ const TeamSeason: FC<propType> = () => {
 			</header>
 			<div className="px-4 w-full max-w-[540px] text-white font-normal relative flex-1 flex flex-col">
 				<section className="team-season w-full">
-					<div className="bg-generic-100 w-full">
-						<h2 className="font-bold text-2xl mb-4">Season View</h2>
-					</div>
-					<div className="matches w-full overflow-y-scroll flex gap-4 flex-col pr-1 md:pr-4 mb-[100px]">
-						<MatchCard />
-						<MatchCard />
-						<MatchCard />
-						<MatchCard />
-						<MatchCard />
-						<MatchCard />
-					</div>
+					<SeasonView />
 				</section>
 				<Tabs>
 					{tabs.map((tab, index) => (
