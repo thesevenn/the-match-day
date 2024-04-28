@@ -13,7 +13,7 @@ const MatchCard: FC<propType> = () => {
 				<p className="text-sm text-gray-200">Arsenal</p>
 			</div>
 			<div className="w-full flex flex-col items-center">
-				<p className="text-sm text-gray-200 mb-2">Sep 04 2023</p>
+				<p className="text-sm text-gray-200 mb-2 text-center">Sep 04 2023</p>
 				<p className="text-4xl text-gray-200 font-bold">2 : 1</p>
 				<p className="text-sm text-gray-400">FT</p>
 			</div>

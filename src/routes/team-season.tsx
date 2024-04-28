@@ -1,9 +1,13 @@
-import {FC} from "react";
+import {FC, useState} from "react";
 
-import MatchCard from "../components/MatchCard";
+import MatchCard from "../components/match-card";
+import Tabs from "../components/ui/tabs";
+import Tab from "../components/ui/tab";
 
+const tabs = ["season", "calendar", "matchday"];
 interface propType {}
 const TeamSeason: FC<propType> = () => {
+	const [activeTab, setActiveTab] = useState<number>(0);
 	return (
 		<section className="team-season w-full bg-generic-100 flex flex-col gap-8 items-center">
 			<header className="header-league-info flex justify-between items-center bg-primary-500 p-4 lg:px-48 w-full sticky top-0 z-10">
@@ -40,18 +44,19 @@ const TeamSeason: FC<propType> = () => {
 						<MatchCard />
 					</div>
 				</section>
-				<div className="tabs bg-dark-200/70 border-[1px] border-solid border-white/30 fixed bottom-4 flex justify-between items-center text-center left-1/2 w-[90%] max-w-[400px] px-4 py-3 rounded-full -translate-x-1/2 text-sm gap-2 backdrop-blur-md lowercase isolate text-generic-100">
-					<p className="rounded-full w-full cursor-pointer font-medium">
-						season view
-					</p>
-					<p className="rounded-full w-full cursor-pointer font-medium">
-						calender view
-					</p>
-					<p className="rounded-full w-full cursor-pointer font-medium">
-						matchday view
-					</p>
-					<div className="absolute bg-primary-500 w-36 h-full bottom-0 rounded-full -z-10 left-0"></div>
-				</div>
+				<Tabs>
+					{tabs.map((tab, index) => (
+						<Tab
+							key={tab}
+							index={index}
+							active={activeTab == index}
+							bg="bg-primary-500"
+							setActiveTab={setActiveTab}
+						>
+							{tab}
+						</Tab>
+					))}
+				</Tabs>
 			</div>
 		</section>
 	);
