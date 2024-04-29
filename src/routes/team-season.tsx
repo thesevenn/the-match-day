@@ -1,7 +1,7 @@
 import {FC, useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import MatchCard from "../components/match-card";
+import {Fixture} from "../types/match";
 import Tabs from "../components/ui/tabs";
 import Tab from "../components/ui/tab";
 import SeasonView from "../components/season-view";
@@ -9,27 +9,60 @@ import {getSeasonOfTeam} from "../api/get-season";
 import {currentSeason} from "../lib/current-season";
 
 const tabs = ["season", "calendar", "matchday"];
-const value = [
-	{
-		name: "season",
-		render: SeasonView,
-	},
-];
+
 interface propType {}
 const TeamSeason: FC<propType> = () => {
 	const [activeTab, setActiveTab] = useState<number>(0);
+	const [fixtures, setFixtures] = useState<Array<Fixture>>([]);
 	const {_league, _team} = useParams();
 
 	useEffect(() => {
 		async function getData() {
-			const season = currentSeason();
-			const data = await getSeasonOfTeam(
-				_team || "",
-				season.toString(),
-				_league
-			);
-			const extractedData = data.response;
-			console.log(data);
+			console.log("inside cached");
+			const cachedFixtures: string = localStorage.getItem("fixtures")!;
+			const cachedTeam: string = localStorage.getItem("user-team")!;
+			if (
+				cachedFixtures &&
+				JSON.parse(cachedTeam) == _team &&
+				cachedFixtures.length > 2
+			) {
+				console.log(JSON.parse(cachedFixtures));
+				setFixtures(JSON.parse(cachedFixtures));
+			} else {
+				const season = currentSeason();
+				const data = await getSeasonOfTeam(
+					_team || "",
+					season.toString(),
+					_league
+				);
+				const extractedData: Array<Fixture> = data.response.map(
+					//@ts-expect-error complex api response shape
+					(match, index: number) => {
+						return {
+							id: match.fixture.id,
+							date: match.fixture.date,
+							matchday: index + 1,
+							venue: match.fixture.venue.name,
+							status: {
+								short: match.fixture.status.short,
+								elapsed: match.fixture.status.elapsed,
+							},
+							teams: match.teams,
+							goals: match.goals,
+							league: {
+								id: match.league.id,
+								name: match.league.name,
+								season: match.league.season,
+							},
+						};
+					}
+				);
+				setFixtures(extractedData.reverse());
+				localStorage.clear();
+				localStorage.setItem("fixtures", JSON.stringify(extractedData));
+				localStorage.setItem("user-team", JSON.stringify(_team));
+				console.log(data);
+			}
 		}
 		getData();
 	}, [_team, _league]);
@@ -57,7 +90,7 @@ const TeamSeason: FC<propType> = () => {
 			</header>
 			<div className="px-4 w-full max-w-[540px] text-white font-normal relative flex-1 flex flex-col">
 				<section className="team-season w-full">
-					<SeasonView />
+					<SeasonView fixtures={fixtures} />
 				</section>
 				<Tabs>
 					{tabs.map((tab, index) => (

@@ -1,5 +1,8 @@
 import {FC} from "react";
+
 import {Fixture} from "../types/match";
+import {formattedDate} from "../lib/formatted-date";
+import {extractTime} from "../lib/extract-time";
 
 interface propType {
 	fixture: Fixture;
@@ -19,12 +22,12 @@ const MatchCard: FC<propType> = ({fixture}) => {
 			</div>
 			<div className="w-full flex flex-col items-center">
 				<p className="text-[12px] sm:text-sm text-gray-200 mb-2 text-center">
-					Sep 04 2023
+					{formattedDate(fixture.date)}
 				</p>
 				<p className="text-2xl sm:text-4xl text-gray-200 font-bold">
 					{fixture.status.short == "HT" || fixture.status.short == "FT"
 						? fixture.goals.home + " : " + fixture.goals.away
-						: fixture.date.toString()}
+						: extractTime(fixture.date)}
 				</p>
 				<p className="text-sm text-gray-400 text-center">
 					{(fixture.status.short == "FT" || fixture.status.short == "HT") &&
