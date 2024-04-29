@@ -44,7 +44,11 @@ const SelectTeam: FC<propType> = () => {
 						country: item.team.country,
 					};
 				});
-				setTeams(extractedData);
+				setTeams(
+					extractedData.sort((teamA, teamB) =>
+						teamA.name < teamB.name ? -1 : 1
+					)
+				);
 				localStorage.clear();
 				localStorage.setItem("teams-cache", JSON.stringify(extractedData));
 				localStorage.setItem("user-leagueId", JSON.stringify(_league));
