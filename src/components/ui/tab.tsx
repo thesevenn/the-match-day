@@ -18,7 +18,7 @@ const Tab: FC<propType> = ({
 }) => {
 	return (
 		<p
-			className={`rounded-full cursor-pointer capitalize font-medium select-none transition-colors px-4 md:px-8 py-2 ${
+			className={`rounded-full cursor-pointer capitalize font-medium select-none transition-colors px-4 sm:px-8 py-2 ${
 				active ? text : "text-white"
 			} ${active ? bg : "bg-transparent"}`}
 			onClick={() => setActiveTab(index)}

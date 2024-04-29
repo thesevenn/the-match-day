@@ -36,7 +36,6 @@ const SelectTeam: FC<propType> = () => {
 				console.log("inside api");
 				//@ts-expect-error complex data shape from api
 				const extractedData: Array<Team> = data.response.map(item => {
-					item = item as Team;
 					return {
 						id: item.team.id,
 						name: item.team.name,
