@@ -5,6 +5,7 @@ import {Fixture} from "../types/match";
 import Tabs from "../components/ui/tabs";
 import Tab from "../components/ui/tab";
 import SeasonView from "../components/season-view";
+import CalendarView from "../components/calendar-view";
 import {getSeasonOfTeam} from "../api/get-season";
 import {currentSeason} from "../lib/current-season";
 
@@ -64,7 +65,7 @@ const TeamSeason: FC<propType> = () => {
 				console.log(data);
 			}
 		}
-		getData();
+		// getData();
 	}, [_team, _league]);
 	return (
 		<section className="team-season w-full bg-generic-100 flex flex-col gap-8 items-center">
@@ -90,7 +91,10 @@ const TeamSeason: FC<propType> = () => {
 			</header>
 			<div className="px-4 w-full max-w-[540px] text-white font-normal relative flex-1 flex flex-col">
 				<section className="team-season w-full">
-					<SeasonView fixtures={fixtures} />
+					{/* <SeasonView fixtures={fixtures} /> */}
+					{/* TODO - Calendar view  */}
+					<CalendarView />
+					{/* TODO - Matchday view */}
 				</section>
 				<Tabs>
 					{tabs.map((tab, index) => (
