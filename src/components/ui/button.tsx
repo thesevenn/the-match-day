@@ -1,6 +1,6 @@
 import {FC, HTMLAttributes} from "react";
 
-import {buttonVariants} from "../../types/button-variants";
+import {buttonVariants} from "../../types/button-variants.type";
 interface propType extends HTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
 	variant?: buttonVariants;

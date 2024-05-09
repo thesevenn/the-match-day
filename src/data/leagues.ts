@@ -1,6 +1,6 @@
-import {League} from "../types/league";
+import {League} from "../types/league.type";
 
-export const leagues: Array<League> = [
+export const LEAGUES: Array<League> = [
 	{
 		id: 39,
 		name: "Premier Leauge",

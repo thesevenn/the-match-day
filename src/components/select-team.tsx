@@ -3,13 +3,13 @@ import {useParams, Link} from "react-router-dom";
 
 import {Check} from "lucide-react";
 
-import {Team} from "../types/team";
-import {League} from "../types/league";
-import {buttonVariants} from "../types/button-variants";
+import {Team} from "../types/team.type";
+import {League} from "../types/league.type";
+import {buttonVariants} from "../types/button-variants.type";
 import Button from "./ui/button";
 import {getTeamsOfLeague} from "../api/get-teams";
 import MaxWidthWrapper from "./ui/max-width-wrapper";
-import {leagues} from "../data/leagues";
+import {LEAGUES} from "../data/leagues";
 import {currentSeason} from "../lib/current-season";
 
 interface propType {}
@@ -59,7 +59,7 @@ const SelectTeam: FC<propType> = () => {
 	useEffect(() => {
 		console.log("reloads");
 		setCurrentLeague(
-			leagues.find(league => league.id == parseInt(_league || ""))
+			LEAGUES.find(league => league.id == parseInt(_league || ""))
 		);
 	}, [_league]);
 

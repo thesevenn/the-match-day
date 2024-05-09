@@ -1,7 +1,7 @@
 import {FC} from "react";
 
 import MatchCard from "./match-card";
-import {Fixture} from "../types/match";
+import {Fixture} from "../types/fixture.type";
 
 interface propType {
 	fixtures: Array<Fixture>;

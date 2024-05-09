@@ -1,4 +1,4 @@
-import {Interactions} from "../../types/interactions";
+import {Interactions} from "../../types/interactions.type";
 
 const SliderInteractions: Interactions = {
 	handleStart: (event, setMouseStart, setDragging) => {

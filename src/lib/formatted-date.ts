@@ -1,18 +1,7 @@
-export function formattedDate(date: Date): string {
-	const months: Array<string> = [
-		"Jan",
-		"Feb",
-		"Mar",
-		"Apr",
-		"May",
-		"Jun",
-		"Jul",
-		"Aug",
-		"Sep",
-		"Oct",
-		"Nov",
-		"Dec",
-	];
+import {monthsInWord} from "../data/monthsInWords";
+
+export function formattedDate(date: string): string {
+	const months = monthsInWord;
 	const dateObject = new Date(date);
 	const month: string = months[dateObject.getMonth()];
 	const year: number = dateObject.getFullYear();

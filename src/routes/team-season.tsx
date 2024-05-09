@@ -1,7 +1,7 @@
 import {FC, useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
-import {Fixture} from "../types/match";
+import {Fixture} from "../types/fixture.type";
 import Tabs from "../components/ui/tabs";
 import Tab from "../components/ui/tab";
 import SeasonView from "../components/season-view";
@@ -65,7 +65,7 @@ const TeamSeason: FC<propType> = () => {
 				console.log(data);
 			}
 		}
-		// getData();
+		getData();
 	}, [_team, _league]);
 	return (
 		<section className="team-season w-full bg-generic-100 flex flex-col gap-8 items-center">
@@ -84,7 +84,7 @@ const TeamSeason: FC<propType> = () => {
 						>
 							Premier League
 						</p>
-						<p className="text-sm font-medium">season 2023-24</p>
+						<p className="text-sm font-medium">2023/24</p>
 					</div>
 				</div>
 				<h2>TMD</h2>
@@ -93,7 +93,7 @@ const TeamSeason: FC<propType> = () => {
 				<section className="team-season w-full">
 					{/* <SeasonView fixtures={fixtures} /> */}
 					{/* TODO - Calendar view  */}
-					<CalendarView />
+					<CalendarView fixtures={fixtures} selectedTeam={_team} />
 					{/* TODO - Matchday view */}
 				</section>
 				<Tabs>

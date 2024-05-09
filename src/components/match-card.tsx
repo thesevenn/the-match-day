@@ -1,6 +1,6 @@
 import {FC} from "react";
 
-import {Fixture} from "../types/match";
+import {Fixture} from "../types/fixture.type";
 import {formattedDate} from "../lib/formatted-date";
 import {extractTime} from "../lib/extract-time";
 

@@ -3,11 +3,11 @@ import {FC, useState, useEffect, useRef} from "react";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {Link} from "react-router-dom";
 
-import {buttonVariants} from "../types/button-variants";
+import {buttonVariants} from "../types/button-variants.type";
 import MaxWidthWrapper from "./ui/max-width-wrapper";
 import Button from "./ui/button";
 import Slider from "./league";
-import {leagues} from "../data/leagues";
+import {LEAGUES} from "../data/leagues";
 
 interface propType {}
 const SelectLeague: FC<propType> = () => {
@@ -18,7 +18,7 @@ const SelectLeague: FC<propType> = () => {
 		if (sliderRef.current) {
 			const sliderWidth = sliderRef.current.scrollWidth;
 			const gap: number = parseInt(getComputedStyle(sliderRef.current).gap);
-			setWidth(sliderWidth / (leagues.length - 1) + gap);
+			setWidth(sliderWidth / (LEAGUES.length - 1) + gap);
 			setWidth(250 + gap);
 		}
 	}
@@ -38,13 +38,13 @@ const SelectLeague: FC<propType> = () => {
 	function handleChangeLeft() {
 		setCurrent(prev => {
 			if (prev == 0) {
-				return leagues.length - 1;
+				return LEAGUES.length - 1;
 			} else return prev - 1;
 		});
 	}
 	function handleChangeRight() {
 		setCurrent(prev => {
-			if (prev >= leagues.length - 1) return 0;
+			if (prev >= LEAGUES.length - 1) return 0;
 			else return prev + 1;
 		});
 	}
@@ -53,14 +53,14 @@ const SelectLeague: FC<propType> = () => {
 		<section
 			className={`select-league w-full h-screen flex justify-center`}
 			style={{
-				backgroundImage: `url(${leagues[current].backdrop})`,
+				backgroundImage: `url(${LEAGUES[current].backdrop})`,
 				backgroundPosition: "center",
 				backgroundRepeat: "no-repeat",
 				backgroundSize: "cover",
 			}}
 		>
 			<div
-				className={`w-full h-screen flex justify-center ${leagues[current].background}`}
+				className={`w-full h-screen flex justify-center ${LEAGUES[current].background}`}
 			>
 				<MaxWidthWrapper>
 					<div className="flex flex-col items-center justify-between w-full py-12 h-full gap-8">
@@ -72,7 +72,7 @@ const SelectLeague: FC<propType> = () => {
 									style={{transform: `translateX(${-current * width}px)`}}
 									ref={sliderRef}
 								>
-									{leagues.map((league, index) => (
+									{LEAGUES.map((league, index) => (
 										<Slider
 											{...league}
 											key={league.name}
@@ -93,7 +93,7 @@ const SelectLeague: FC<propType> = () => {
 											<ChevronLeft />
 										</i>
 										<span className="grow capitalize">
-											{leagues[current].name}
+											{LEAGUES[current].name}
 										</span>
 										<i
 											tabIndex={2}
@@ -107,7 +107,7 @@ const SelectLeague: FC<propType> = () => {
 							</div>
 						</div>
 						<div className="">
-							<Link to={`/app/league/${leagues[current].id}/team`}>
+							<Link to={`/app/league/${LEAGUES[current].id}/team`}>
 								<Button variant={buttonVariants.secondary}>
 									Confirm Selection
 								</Button>

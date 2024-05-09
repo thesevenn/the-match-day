@@ -1,8 +1,8 @@
-import {Team} from "./team";
+import {Team} from "./team.type";
 
 export interface Fixture {
 	id: number;
-	date: Date;
+	date: string;
 	matchday: number;
 	venue: string;
 	status: {
