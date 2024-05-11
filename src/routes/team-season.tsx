@@ -6,6 +6,7 @@ import Tabs from "../components/ui/tabs";
 import Tab from "../components/ui/tab";
 import SeasonView from "../components/season-view";
 import CalendarView from "../components/calendar-view";
+import MatchDayView from "../components/matchday-view";
 import {getSeasonOfTeam} from "../api/get-season";
 import {currentSeason} from "../lib/current-season";
 
@@ -93,8 +94,9 @@ const TeamSeason: FC<propType> = () => {
 				<section className="team-season w-full">
 					{/* <SeasonView fixtures={fixtures} /> */}
 					{/* TODO - Calendar view  */}
-					<CalendarView fixtures={fixtures} selectedTeam={_team} />
+					{/* <CalendarView fixtures={fixtures} selectedTeam={_team} /> */}
 					{/* TODO - Matchday view */}
+					<MatchDayView fixture={fixtures[0]} />
 				</section>
 				<Tabs>
 					{tabs.map((tab, index) => (

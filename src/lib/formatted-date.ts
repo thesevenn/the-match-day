@@ -1,7 +1,7 @@
-import {monthsInWord} from "../data/monthsInWords";
+import {MONTHSINWORDS} from "../data/monthsInWords";
 
 export function formattedDate(date: string): string {
-	const months = monthsInWord;
+	const months = MONTHSINWORDS;
 	const dateObject = new Date(date);
 	const month: string = months[dateObject.getMonth()];
 	const year: number = dateObject.getFullYear();

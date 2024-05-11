@@ -1,4 +1,4 @@
-export function extractTime(date: Date): string {
+export function extractTime(date: string): string {
 	const formattedDate = new Date(date);
 	const hours: number = formattedDate.getHours();
 	const minutes: number = formattedDate.getMinutes();

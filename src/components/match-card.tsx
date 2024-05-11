@@ -3,12 +3,14 @@ import {FC} from "react";
 import {Fixture} from "../types/fixture.type";
 import {formattedDate} from "../lib/formatted-date";
 import {extractTime} from "../lib/extract-time";
+import LoadingMatchCard from "./skeleton/loading-matchcard";
 
 interface propType {
 	fixture: Fixture;
 }
 const MatchCard: FC<propType> = ({fixture}) => {
 	// TODO - add link to open each fixuter matchday
+	if (fixture == null) return <LoadingMatchCard />;
 	return (
 		<div className="grid grid-cols-3 w-full bg-generic-200 rounded-lg p-4 items-center justify-center hover:bg-generic-100 border-solid border-[1px] border-transparent/10 hover:border-white/10 cursor-pointer transition-colors">
 			<div className="w-full flex flex-col items-center gap-1 justify-center">
