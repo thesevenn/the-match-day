@@ -1,18 +1,81 @@
-import {FC} from "react";
+import {FC, useState, useEffect} from "react";
 
 import {ChevronRight, MapPin, Timer} from "lucide-react";
 
 import {Fixture} from "../types/fixture.type";
 import LoadingSpinner from "./loader/loading-spinner";
 import MatchCard from "./match-card";
+import {getPredictions} from "../api/get-predictions";
+import {LEAGUES} from "../data/leagues";
+import {extractTime} from "../lib/extract-time";
+
+interface FixtureDetails {
+	predictions: {
+		home: string;
+		draw: string;
+		away: string;
+	};
+	teams: {
+		home: {
+			id: number;
+			name: string;
+			form: string;
+		};
+		away: {
+			id: number;
+			name: string;
+			form: string;
+		};
+	};
+}
 
 interface propType {
 	fixture: Fixture;
+	team: string;
 }
 const MatchDayView: FC<propType> = ({fixture}) => {
+	const [fixtureDetails, setFixtureDetails] = useState<FixtureDetails>(
+		{} as FixtureDetails
+	);
+	useEffect(() => {
+		async function getData() {
+			if (!fixture) return;
+			else {
+				const data = (await getPredictions(fixture.id)).response[0];
+				console.log(data);
+				const extractedData: FixtureDetails = {
+					predictions: {
+						home: data.predictions.percent.home,
+						draw: data.predictions.percent.draw,
+						away: data.predictions.percent.away,
+					},
+					teams: {
+						home: {
+							id: data.teams.home.id,
+							name: data.teams.home.name,
+							form: data.teams.home.league.form,
+						},
+						away: {
+							id: data.teams.away.id,
+							name: data.teams.away.name,
+							form: data.teams.away.league.form,
+						},
+					},
+				};
+				setFixtureDetails(extractedData);
+				extractLastFiveGameForm(extractedData.teams.home.form);
+			}
+		}
+		getData();
+	}, [fixture]);
+
 	if (!fixture) return <LoadingSpinner />;
+	console.log(fixtureDetails);
+	function extractLastFiveGameForm(form: string) {
+		return form.slice(form.length - 5).split("");
+	}
 	return (
-		<section className="min-h-screen mb-12">
+		<section className="mb-12">
 			<div>
 				<h2 className="font-bold text-lg sm:text-2xl mb-4">
 					Match Day Overview
@@ -40,21 +103,23 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 								alt={fixture.teams.home.name}
 							/>
 							<div className="flex justify-between items-center w-2/3">
-								<span className="bg-green-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									w
-								</span>
-								<span className="bg-green-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									w
-								</span>
-								<span className="bg-green-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									w
-								</span>
-								<span className="bg-red-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									l
-								</span>
-								<span className="bg-green-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									w
-								</span>
+								{fixtureDetails.teams &&
+									extractLastFiveGameForm(fixtureDetails.teams.home.form).map(
+										(item, index) => (
+											<span
+												key={index}
+												className={`${
+													item == "w" || item == "W"
+														? "bg-green-400"
+														: item == "l" || item == "L"
+														? "bg-red-400"
+														: "bg-yellow-400"
+												} rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black`}
+											>
+												{item}
+											</span>
+										)
+									)}
 							</div>
 						</div>
 						<div className="flex gap-8 font-medium flex-row itens-center justify-between">
@@ -64,21 +129,23 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 								alt={fixture.teams.away.name}
 							/>
 							<div className="flex justify-between w-2/3 items-center">
-								<span className="bg-yellow-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									d
-								</span>
-								<span className="bg-green-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									w
-								</span>
-								<span className="bg-yellow-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									d
-								</span>
-								<span className="bg-red-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									l
-								</span>
-								<span className="bg-green-400 rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black">
-									w
-								</span>
+								{fixtureDetails.teams &&
+									extractLastFiveGameForm(fixtureDetails.teams.away.form).map(
+										(item, index) => (
+											<span
+												key={index}
+												className={`${
+													item == "w" || item == "W"
+														? "bg-green-400"
+														: item == "l" || item == "L"
+														? "bg-red-400"
+														: "bg-yellow-400"
+												} rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black`}
+											>
+												{item}
+											</span>
+										)
+									)}
 							</div>
 						</div>
 					</div>
@@ -90,24 +157,33 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 					</h2>
 					<div className="line-break w-full h-[2px] bg-slate-400/20 mt-1" />
 					<div className="p-4 flex flex-col gap-4">
-						<div className="gap-2">
+						<div className="flex gap-2 items-center">
+							<img
+								className="w-6 aspect-square object-contain"
+								src={
+									LEAGUES.filter(item => fixture.league.id == item.id)[0].src
+								}
+								alt={
+									LEAGUES.filter(item => fixture.league.id == item.id)[0].alt
+								}
+							/>
 							<div className="flex flex-col">
 								<p className="text-sm text-white/70">competition</p>
-								<span className="text-sm">La liga</span>
+								<span className="text-sm">{fixture.league.name}</span>
 							</div>
 						</div>
-						<div className="flex gap-1 items-center">
+						<div className="flex gap-2 items-center">
 							<MapPin className="" />
 							<div className="flex flex-col">
 								<p className="text-sm text-white/70">Stadium</p>
-								<span className="text-sm">Estadion Bernabeu</span>
+								<span className="text-sm">{fixture.venue}</span>
 							</div>
 						</div>
 						<div className="flex gap-1 items-center">
 							<Timer />
 							<div className="flex flex-col">
 								<p className="text-sm text-white/70">kick-off</p>
-								<span className="text-sm">Feb 04</span>
+								<span className="text-sm">{extractTime(fixture.date)}</span>
 							</div>
 						</div>
 						<div>
@@ -118,26 +194,36 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 						</div>
 					</div>
 				</div>
-				<div className="predictions">
-					<h2 className="flex items-center text-lg font-semibold pl-2">
-						Predictions <ChevronRight className="w-5 text-white" />
-					</h2>
-					<div className="line-break w-full h-[2px] bg-slate-400/20 mt-1" />
-					<div className="w-full flex mx-2 overflow-hidden rounded-full mt-2">
-						<div className="w-3/6 h-5 bg-blue-500 text-dark-100 text-center text-sm">
-							<span className="mr-1">arsenal</span>
-							50%
-						</div>
-						<div className="w-2/6 h-5 bg-white text-dark-100 text-center text-sm">
-							<span className=" mr-1">draw</span>
-							33%
-						</div>
-						<div className="w-1/6 h-5 bg-red-500 text-dark-100 text-center text-sm">
-							<span className=" mr-1">everton</span>
-							17%
+				{fixtureDetails && fixtureDetails.predictions ? (
+					<div className="predictions mb-16">
+						<h2 className="flex items-center text-lg font-semibold pl-2">
+							Predictions <ChevronRight className="w-5 text-white" />
+						</h2>
+						<div className="line-break w-full h-[2px] bg-slate-400/20 mt-1" />
+						<div className="w-full flex mx-2 overflow-hidden rounded-full mt-2">
+							<div
+								className={`w-[${fixtureDetails.predictions.home}] h-5 bg-blue-500 text-dark-100 text-center text-sm`}
+							>
+								{/* <span className="mr-1">{fixtureDetails.teams.home.name}</span> */}
+								{fixtureDetails.predictions.home}
+							</div>
+							<div
+								className={`w-[${fixtureDetails.predictions.draw}] h-5 bg-white text-dark-100 text-center text-sm`}
+							>
+								<span className=" mr-1">draw</span>
+								{fixtureDetails.predictions.draw}
+							</div>
+							<div
+								className={`w-[${fixtureDetails.predictions.away}] h-5 bg-red-500 text-dark-100 text-center text-sm`}
+							>
+								{/* <span className=" mr-1">{fixtureDetails.teams.away.name}</span> */}
+								{fixtureDetails.predictions.away}
+							</div>
 						</div>
 					</div>
-				</div>
+				) : (
+					<LoadingSpinner />
+				)}
 			</div>
 		</section>
 	);

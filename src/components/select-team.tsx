@@ -33,6 +33,7 @@ const SelectTeam: FC<propType> = () => {
 			} else {
 				const year: number = currentSeason();
 				const data = await getTeamsOfLeague(parseInt(_league || ""), year);
+				console.log(data);
 				console.log("inside api");
 				//@ts-expect-error complex data shape from api
 				const extractedData: Array<Team> = data.response.map(item => {
