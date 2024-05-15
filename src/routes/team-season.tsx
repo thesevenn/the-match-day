@@ -9,6 +9,8 @@ import CalendarView from "../components/calendar-view";
 import MatchDayView from "../components/matchday-view";
 import {getSeasonOfTeam} from "../api/get-season";
 import {currentSeason} from "../lib/current-season";
+import {LEAGUES} from "../data/leagues";
+import {League} from "../types/league.type";
 
 const tabs = ["season", "calendar", "matchday"];
 
@@ -17,8 +19,14 @@ const TeamSeason: FC<propType> = () => {
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [fixtures, setFixtures] = useState<Array<Fixture>>([]);
 	const [selectedMatch, setSelectedMatch] = useState<number>(0);
+	const [currentLeague, setCurrentLeague] = useState<League>();
 	const {_league, _team} = useParams();
 
+	useEffect(() => {
+		setCurrentLeague(
+			LEAGUES.filter(leauge => _league && leauge.id == parseInt(_league))[0]
+		);
+	}, [_league]);
 	useEffect(() => {
 		async function getData() {
 			console.log("inside cached");
@@ -70,13 +78,14 @@ const TeamSeason: FC<propType> = () => {
 		}
 		getData();
 	}, [_team, _league]);
+	const season: number = currentSeason();
 	return (
 		<section className="team-season w-full bg-generic-100 flex flex-col gap-8 items-center">
 			<header className="header-league-info flex justify-between items-center bg-primary-500 p-4 lg:px-48 w-full sticky top-0 z-10">
 				<div className="flex w-full gap-2 items-center">
 					<img
-						src="/pl.png"
-						alt="user selected league"
+						src={currentLeague?.src}
+						alt={currentLeague?.alt}
 						className="invert max-w-12 object-contain"
 					/>
 					<div className="flex flex-col">
@@ -85,9 +94,11 @@ const TeamSeason: FC<propType> = () => {
 							aria-readonly
 							aria-roledescription="Selected League"
 						>
-							Premier League
+							{currentLeague?.name}
 						</p>
-						<p className="text-sm font-medium">2023/24</p>
+						<p className="text-sm font-medium">
+							{season}/{(season + 1) % 2000}
+						</p>
 					</div>
 				</div>
 				<h2>TMD</h2>
