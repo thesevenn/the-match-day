@@ -1,12 +1,18 @@
-import {FC} from "react";
+import {Dispatch, FC, SetStateAction} from "react";
 
 import MatchCard from "./match-card";
 import {Fixture} from "../types/fixture.type";
 
 interface propType {
 	fixtures: Array<Fixture>;
+	setSelectedMatch: Dispatch<SetStateAction<number>>;
+	setActiveTab: Dispatch<SetStateAction<number>>;
 }
-const SeasonView: FC<propType> = ({fixtures}) => {
+const SeasonView: FC<propType> = ({
+	fixtures,
+	setSelectedMatch,
+	setActiveTab,
+}) => {
 	return (
 		<>
 			<div className="bg-generic-100 w-full">
@@ -14,7 +20,16 @@ const SeasonView: FC<propType> = ({fixtures}) => {
 			</div>
 			<div className="matches w-full overflow-y-scroll flex gap-4 flex-col pr-1 md:pr-4 mb-[100px]">
 				{fixtures.map(fixture => (
-					<MatchCard key={fixture.id} fixture={fixture} />
+					<a
+						href="#"
+						onClick={() => {
+							setSelectedMatch(fixture.id);
+							setActiveTab(2);
+						}}
+						key={fixture.id}
+					>
+						<MatchCard key={fixture.id} fixture={fixture} />
+					</a>
 				))}
 			</div>
 		</>

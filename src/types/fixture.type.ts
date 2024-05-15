@@ -2,6 +2,7 @@ import {Team} from "./team.type";
 
 export interface Fixture {
 	id: number;
+	refree: string;
 	date: string;
 	matchday: number;
 	venue: string;

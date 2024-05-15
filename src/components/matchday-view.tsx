@@ -8,6 +8,7 @@ import MatchCard from "./match-card";
 import {getPredictions} from "../api/get-predictions";
 import {LEAGUES} from "../data/leagues";
 import {extractTime} from "../lib/extract-time";
+import {formattedDate} from "../lib/formatted-date";
 
 interface FixtureDetails {
 	predictions: {
@@ -37,9 +38,11 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 	const [fixtureDetails, setFixtureDetails] = useState<FixtureDetails>(
 		{} as FixtureDetails
 	);
+	console.log(fixture);
 	useEffect(() => {
 		async function getData() {
 			if (!fixture) return;
+			// TODO - if no fixture given, use the team to get live match if any and if there are none show now live match
 			else {
 				const data = (await getPredictions(fixture.id)).response[0];
 				console.log(data);
@@ -70,7 +73,7 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 	}, [fixture]);
 
 	if (!fixture) return <LoadingSpinner />;
-	console.log(fixtureDetails);
+
 	function extractLastFiveGameForm(form: string) {
 		return form.slice(form.length - 5).split("");
 	}
@@ -154,12 +157,13 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 				<div className="game-details mt-8 bg-dark-100 p-6 rounded-md">
 					<h2 className="flex items-center text-lg font-semibold">
 						Game Information
+						<ChevronRight className="w-5 text-white" />
 					</h2>
 					<div className="line-break w-full h-[2px] bg-slate-400/20 mt-1" />
 					<div className="p-4 flex flex-col gap-4">
 						<div className="flex gap-2 items-center">
 							<img
-								className="w-6 aspect-square object-contain"
+								className="w-6 h-auto aspect-square object-cover"
 								src={
 									LEAGUES.filter(item => fixture.league.id == item.id)[0].src
 								}
@@ -183,38 +187,47 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 							<Timer />
 							<div className="flex flex-col">
 								<p className="text-sm text-white/70">kick-off</p>
-								<span className="text-sm">{extractTime(fixture.date)}</span>
+								<span className="text-sm">
+									{formattedDate(fixture.date)}{" "}
+									<span className="lowercase">at</span>{" "}
+									{extractTime(fixture.date)}
+								</span>
 							</div>
 						</div>
 						<div>
-							<div>
-								<p className="text-sm text-white/70">refree</p>
-								<span>Frank sinatra jr.</span>
-							</div>
+							{fixture && fixture.refree && (
+								<div>
+									<p className="text-sm text-white/70">refree</p>
+									<span>{fixture.refree}</span>
+								</div>
+							)}
 						</div>
 					</div>
 				</div>
 				{fixtureDetails && fixtureDetails.predictions ? (
-					<div className="predictions mb-16">
+					<div className="predictions mb-16 mt-6">
 						<h2 className="flex items-center text-lg font-semibold pl-2">
 							Predictions <ChevronRight className="w-5 text-white" />
 						</h2>
 						<div className="line-break w-full h-[2px] bg-slate-400/20 mt-1" />
 						<div className="w-full flex mx-2 overflow-hidden rounded-full mt-2">
 							<div
-								className={`w-[${fixtureDetails.predictions.home}] h-5 bg-blue-500 text-dark-100 text-center text-sm`}
+								style={{width: fixtureDetails.predictions.home}}
+								className="h-5 bg-blue-500 text-dark-100 text-center text-sm"
 							>
 								{/* <span className="mr-1">{fixtureDetails.teams.home.name}</span> */}
 								{fixtureDetails.predictions.home}
 							</div>
 							<div
-								className={`w-[${fixtureDetails.predictions.draw}] h-5 bg-white text-dark-100 text-center text-sm`}
+								style={{width: fixtureDetails.predictions.draw}}
+								className="h-5 bg-white text-dark-100 text-center text-sm"
 							>
 								<span className=" mr-1">draw</span>
 								{fixtureDetails.predictions.draw}
 							</div>
 							<div
-								className={`w-[${fixtureDetails.predictions.away}] h-5 bg-red-500 text-dark-100 text-center text-sm`}
+								style={{width: fixtureDetails.predictions.away}}
+								className="h-5 bg-red-500 text-dark-100 text-center text-sm"
 							>
 								{/* <span className=" mr-1">{fixtureDetails.teams.away.name}</span> */}
 								{fixtureDetails.predictions.away}

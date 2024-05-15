@@ -16,6 +16,7 @@ interface propType {}
 const TeamSeason: FC<propType> = () => {
 	const [activeTab, setActiveTab] = useState<number>(0);
 	const [fixtures, setFixtures] = useState<Array<Fixture>>([]);
+	const [selectedMatch, setSelectedMatch] = useState<number>(0);
 	const {_league, _team} = useParams();
 
 	useEffect(() => {
@@ -42,6 +43,7 @@ const TeamSeason: FC<propType> = () => {
 					(match, index: number) => {
 						return {
 							id: match.fixture.id,
+							refree: match.fixture.refree,
 							date: match.fixture.date,
 							matchday: index + 1,
 							venue: match.fixture.venue.name,
@@ -92,11 +94,26 @@ const TeamSeason: FC<propType> = () => {
 			</header>
 			<div className="px-4 w-full max-w-[540px] text-white font-normal relative flex-1 flex flex-col">
 				<section className="team-season w-full">
-					{/* <SeasonView fixtures={fixtures} /> */}
+					{activeTab == 0 ? (
+						<SeasonView
+							setSelectedMatch={setSelectedMatch}
+							setActiveTab={setActiveTab}
+							fixtures={fixtures}
+						/>
+					) : activeTab == 1 ? (
+						<CalendarView fixtures={fixtures} selectedTeam={_team} />
+					) : (
+						<MatchDayView
+							team={_team || ""}
+							fixture={
+								fixtures.filter(fixture => fixture.id == selectedMatch)[0]
+							}
+						/>
+					)}
+
 					{/* TODO - Calendar view  */}
-					{/* <CalendarView fixtures={fixtures} selectedTeam={_team} /> */}
+
 					{/* TODO - Matchday view */}
-					<MatchDayView fixture={fixtures[0]} />
 				</section>
 				<Tabs>
 					{tabs.map((tab, index) => (
