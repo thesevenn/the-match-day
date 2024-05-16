@@ -9,6 +9,7 @@ import {getPredictions} from "../api/get-predictions";
 import {LEAGUES} from "../data/leagues";
 import {extractTime} from "../lib/extract-time";
 import {formattedDate} from "../lib/formatted-date";
+import NoMatch from "./loader/no-match";
 
 interface FixtureDetails {
 	predictions: {
@@ -31,7 +32,7 @@ interface FixtureDetails {
 }
 
 interface propType {
-	fixture: Fixture;
+	fixture: Fixture | null;
 	team: string;
 }
 const MatchDayView: FC<propType> = ({fixture}) => {
@@ -42,7 +43,7 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 	useEffect(() => {
 		async function getData() {
 			if (!fixture) return;
-			// TODO - if no fixture given, use the team to get live match if any and if there are none show now live match
+			// TODO - if no fixture given, use the team to get live match if any and if there are none show no live match
 			else {
 				const data = (await getPredictions(fixture.id)).response[0];
 				console.log(data);
@@ -72,87 +73,95 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 		getData();
 	}, [fixture]);
 
+	if (fixture == null) return <NoMatch />;
 	if (!fixture) return <LoadingSpinner />;
 
 	function extractLastFiveGameForm(form: string) {
+		if (!form) return [];
 		return form.slice(form.length - 5).split("");
 	}
 	return (
 		<section className="mb-12">
-			<div>
+			{/* <div>
 				<h2 className="font-bold text-lg sm:text-2xl mb-4">
 					Match Day Overview
 				</h2>
-			</div>
+			</div> */}
 			<div>
 				<p className="text-sm font-medium text-white/60 mb-1">
 					matchday {fixture.matchday}
 				</p>
 				<MatchCard fixture={fixture} />
-				<div className="mt-8">
-					<h2 className="flex items-center text-lg font-semibold pl-2">
-						form guide
-						<span className="text-sm text-white/70 ml-1 font-normal">
-							{"("}last 5 league games{")"}
-						</span>{" "}
-						<ChevronRight className="w-5 text-white" />
-					</h2>
-					<div className="line-break w-full h-[2px] bg-slate-400/20 mt-1" />
-					<div className="p-8 flex flex-col gap-4">
-						<div className="flex justify-between font-medium flex-row items-center">
-							<img
-								className="w-14"
-								src={fixture.teams.home.logo}
-								alt={fixture.teams.home.name}
-							/>
-							<div className="flex justify-between items-center w-2/3">
-								{fixtureDetails.teams &&
-									extractLastFiveGameForm(fixtureDetails.teams.home.form).map(
-										(item, index) => (
-											<span
-												key={index}
-												className={`${
-													item == "w" || item == "W"
-														? "bg-green-400"
-														: item == "l" || item == "L"
-														? "bg-red-400"
-														: "bg-yellow-400"
-												} rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black`}
-											>
-												{item}
-											</span>
-										)
-									)}
+				{fixtureDetails &&
+					fixtureDetails.teams &&
+					fixtureDetails.teams.away.form && (
+						<div className="mt-8">
+							<h2 className="flex items-center text-lg font-semibold pl-2">
+								form guide
+								<span className="text-sm text-white/70 ml-1 font-normal">
+									{"("}last 5 league games{")"}
+								</span>{" "}
+								<ChevronRight className="w-5 text-white" />
+							</h2>
+							<div className="line-break w-full h-[2px] bg-slate-400/20 mt-1" />
+
+							<div className="p-8 flex flex-col gap-4">
+								<div className="flex justify-between font-medium flex-row items-center">
+									<img
+										className="w-14"
+										src={fixture.teams.home.logo}
+										alt={fixture.teams.home.name}
+									/>
+									<div className="flex justify-between items-center w-2/3">
+										{fixtureDetails.teams &&
+											extractLastFiveGameForm(
+												fixtureDetails.teams.home.form
+											).map((item, index) => (
+												<span
+													key={index}
+													className={`${
+														item == "w" || item == "W"
+															? "bg-green-400"
+															: item == "l" || item == "L"
+															? "bg-red-400"
+															: "bg-yellow-400"
+													} rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black`}
+												>
+													{item}
+												</span>
+											))}
+									</div>
+								</div>
+
+								<div className="flex gap-8 font-medium flex-row itens-center justify-between">
+									<img
+										className="w-14"
+										src={fixture.teams.away.logo}
+										alt={fixture.teams.away.name}
+									/>
+									<div className="flex justify-between w-2/3 items-center">
+										{fixtureDetails.teams &&
+											extractLastFiveGameForm(
+												fixtureDetails.teams.away.form
+											).map((item, index) => (
+												<span
+													key={index}
+													className={`${
+														item == "w" || item == "W"
+															? "bg-green-400"
+															: item == "l" || item == "L"
+															? "bg-red-400"
+															: "bg-yellow-400"
+													} rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black`}
+												>
+													{item}
+												</span>
+											))}
+									</div>
+								</div>
 							</div>
 						</div>
-						<div className="flex gap-8 font-medium flex-row itens-center justify-between">
-							<img
-								className="w-14"
-								src={fixture.teams.away.logo}
-								alt={fixture.teams.away.name}
-							/>
-							<div className="flex justify-between w-2/3 items-center">
-								{fixtureDetails.teams &&
-									extractLastFiveGameForm(fixtureDetails.teams.away.form).map(
-										(item, index) => (
-											<span
-												key={index}
-												className={`${
-													item == "w" || item == "W"
-														? "bg-green-400"
-														: item == "l" || item == "L"
-														? "bg-red-400"
-														: "bg-yellow-400"
-												} rounded-full p-2 h-8 w-8 text-center flex items-center justify-center text-black`}
-											>
-												{item}
-											</span>
-										)
-									)}
-							</div>
-						</div>
-					</div>
-				</div>
+					)}
 				<div className="standing mt-8"></div>
 				<div className="game-details mt-8 bg-dark-100 p-6 rounded-md">
 					<h2 className="flex items-center text-lg font-semibold">

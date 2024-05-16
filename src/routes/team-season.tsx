@@ -1,6 +1,8 @@
 import {FC, useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 
+import {ArrowDownUp, ArrowUpDown} from "lucide-react";
+
 import {Fixture} from "../types/fixture.type";
 import Tabs from "../components/ui/tabs";
 import Tab from "../components/ui/tab";
@@ -20,6 +22,7 @@ const TeamSeason: FC<propType> = () => {
 	const [fixtures, setFixtures] = useState<Array<Fixture>>([]);
 	const [selectedMatch, setSelectedMatch] = useState<number>(0);
 	const [currentLeague, setCurrentLeague] = useState<League>();
+	const [sortDirection, setSortDirection] = useState<number>(-1);
 	const {_league, _team} = useParams();
 
 	useEffect(() => {
@@ -104,6 +107,32 @@ const TeamSeason: FC<propType> = () => {
 				<h2>TMD</h2>
 			</header>
 			<div className="px-4 w-full max-w-[540px] text-white font-normal relative flex-1 flex flex-col">
+				<div className="mb-4 w-full flex justify-between items-center">
+					<h2 className="font-bold text-lg sm:text-2xl mb-4">
+						{activeTab == 0
+							? "Season view"
+							: activeTab == 1
+							? "Calendar View"
+							: "Matchday Overview"}
+					</h2>
+					<span
+						className="cursor-pointer"
+						onClick={() => {
+							setSortDirection(prev => (prev == -1 ? 1 : -1));
+							setFixtures(fixtures.reverse());
+						}}
+					>
+						{activeTab == 0 ? (
+							sortDirection == -1 ? (
+								<ArrowDownUp />
+							) : (
+								<ArrowUpDown />
+							)
+						) : (
+							""
+						)}
+					</span>
+				</div>
 				<section className="team-season w-full">
 					{activeTab == 0 ? (
 						<SeasonView
@@ -117,14 +146,12 @@ const TeamSeason: FC<propType> = () => {
 						<MatchDayView
 							team={_team || ""}
 							fixture={
-								fixtures.filter(fixture => fixture.id == selectedMatch)[0]
+								selectedMatch
+									? fixtures.filter(fixture => fixture.id == selectedMatch)[0]
+									: null
 							}
 						/>
 					)}
-
-					{/* TODO - Calendar view  */}
-
-					{/* TODO - Matchday view */}
 				</section>
 				<Tabs>
 					{tabs.map((tab, index) => (
