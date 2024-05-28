@@ -22,6 +22,7 @@ const TeamSeason: FC<propType> = () => {
 	const [fixtures, setFixtures] = useState<Array<Fixture>>([]);
 	const [selectedMatch, setSelectedMatch] = useState<number>(0);
 	const [currentLeague, setCurrentLeague] = useState<League>();
+	// -1 represent descending matches, 1 represent asecending matches (by date)
 	const [sortDirection, setSortDirection] = useState<number>(-1);
 	const {_league, _team} = useParams();
 
@@ -40,7 +41,7 @@ const TeamSeason: FC<propType> = () => {
 				JSON.parse(cachedTeam) == _team &&
 				cachedFixtures.length > 2
 			) {
-				console.log(JSON.parse(cachedFixtures));
+				console.log(JSON.parse(cachedFixtures), "cached");
 				setFixtures(JSON.parse(cachedFixtures));
 			} else {
 				const season = currentSeason();
@@ -76,12 +77,12 @@ const TeamSeason: FC<propType> = () => {
 				localStorage.clear();
 				localStorage.setItem("fixtures", JSON.stringify(extractedData));
 				localStorage.setItem("user-team", JSON.stringify(_team));
-				console.log(data);
 			}
 		}
 		getData();
 	}, [_team, _league]);
 	const season: number = currentSeason();
+
 	return (
 		<section className="team-season w-full bg-generic-100 flex flex-col gap-8 items-center">
 			<header className="header-league-info flex justify-between items-center bg-primary-500 p-4 lg:px-48 w-full sticky top-0 z-10">

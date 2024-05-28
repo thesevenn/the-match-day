@@ -16,33 +16,21 @@ interface propType {
 	selectedTeam: string | undefined;
 }
 const CalendarView: FC<propType> = ({selectedTeam, fixtures}) => {
-	// const [fixtures, setFixtures] = useState<Array<Fixture>>([]);
 	const [calendar, setCalendar] = useState<Array<FixtureCalendar>>([]);
 	const [daysFromMonthStart, setDaysFromMonthStart] = useState<number>(-1);
 	const [month, setMonth] = useState<number>(new Date().getMonth());
-	useEffect(() => {
-		const cachedFixtures: string = localStorage.getItem("fixtures")!;
-		if (cachedFixtures && cachedFixtures.length > 2) {
-			const data = JSON.parse(cachedFixtures);
-			// formatting
-			const value = data[0].date;
-			console.log(value, "helo");
-			console.log(extractMonth(value));
-			// setFixtures(data);
-		}
-	}, []);
 
 	useEffect(() => {
 		function generateMonthCalendar() {
-			console.log(fixtures.length, "len");
 			if (fixtures.length) {
-				console.log(fixtures, "inside func");
-				const fixturesThisMonth = fixtures
+				const ascendingFixtures: Array<Fixture> =
+					fixtures[0].matchday == 1 ? [...fixtures] : [...fixtures.reverse()];
+				const fixturesThisMonth = ascendingFixtures
 					.filter(fixture => {
 						return new Date(fixture.date).getMonth() == month;
 					})
 					.sort((a, b) => (a.date < b.date ? 0 : 1));
-				console.log(fixturesThisMonth);
+
 				if (fixturesThisMonth.length > 0) {
 					const monthInit = extractMonth(fixturesThisMonth[0].date);
 					setDaysFromMonthStart(monthInit?.dayOnFirst || 0);
