@@ -41,7 +41,6 @@ const TeamSeason: FC<propType> = () => {
 				JSON.parse(cachedTeam) == _team &&
 				cachedFixtures.length > 2
 			) {
-				console.log(JSON.parse(cachedFixtures), "cached");
 				setFixtures(JSON.parse(cachedFixtures));
 			} else {
 				const season = currentSeason();

@@ -43,7 +43,6 @@ const MatchDayView: FC<propType> = ({fixture}) => {
 	useEffect(() => {
 		async function getData() {
 			if (!fixture) return;
-			// TODO - if no fixture given, use the team to get live match if any and if there are none show no live match
 			else {
 				const data = (await getPredictions(fixture.id)).response[0];
 				console.log(data);

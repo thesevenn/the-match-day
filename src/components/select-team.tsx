@@ -28,13 +28,10 @@ const SelectTeam: FC<propType> = () => {
 				JSON.parse(cachedLeague) == _league &&
 				cachedTeams.length > 2
 			) {
-				console.log("in cache");
 				setTeams(JSON.parse(cachedTeams));
 			} else {
 				const year: number = currentSeason();
 				const data = await getTeamsOfLeague(parseInt(_league || ""), year);
-				console.log(data);
-				console.log("inside api");
 				//@ts-expect-error complex data shape from api
 				const extractedData: Array<Team> = data.response.map(item => {
 					return {
@@ -58,7 +55,6 @@ const SelectTeam: FC<propType> = () => {
 		getData();
 	}, [_league]);
 	useEffect(() => {
-		console.log("reloads");
 		setCurrentLeague(
 			LEAGUES.find(league => league.id == parseInt(_league || ""))
 		);

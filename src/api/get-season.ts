@@ -19,10 +19,6 @@ export async function getSeasonOfTeam(
 			});
 		}
 
-		// const res = await fetch(
-		// 	`${import.meta.env.VITE_BASE_URL}/fixtures?${params}`,
-		// 	{headers: {"x-apisports-key": import.meta.env.VITE_KEYTARGET_API}}
-		// );
 		const res = await fetch("/.netlify/functions/season?" + params);
 		return await res.json();
 	}

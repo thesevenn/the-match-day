@@ -62,24 +62,8 @@ const CalendarView: FC<propType> = ({selectedTeam, fixtures}) => {
 		generateMonthCalendar();
 	}, [fixtures, month]);
 
-	// add the select option to select month on top
-
 	return (
 		<>
-			{/* <div className="bg-generic-100 w-full">
-				<h2 className="font-bold text-lg sm:text-2xl mb-4">Calendar View</h2>
-				<div className="grid grid-cols-2 w-full max-w-48 overflow-hidden rounded-lg absolute z-10 top-1/2 right-1/2">
-					{MONTHSINWORDS.map(item => (
-						<button
-							key={item}
-							className="bg-dark-200/30 rounded-none transition-colors hover:rounded-sm hover:bg-dark-200/50 text-sm"
-						>
-							{item}
-						</button>
-					))}
-				</div>
-			</div> */}
-
 			{calendar.length == 0 ? (
 				<NoCalendarPresent />
 			) : (

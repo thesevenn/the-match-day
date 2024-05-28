@@ -23,16 +23,6 @@ const SelectLeague: FC<propType> = () => {
 		}
 	}
 	useEffect(() => {
-		async function getTeam() {
-			const params = new URLSearchParams({
-				league: "140",
-				season: "2023",
-			});
-			const data = await fetch("/.netlify/functions/teams?" + params);
-			console.log(await data.json());
-		}
-
-		getTeam();
 		// css styles are not available on first render (gap,etc),
 		// certain delay makes it possible for styles to be applied
 		// and access with js
